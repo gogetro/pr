@@ -1,0 +1,178 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Sarabun', sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-police-600 hover:bg-police-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-police-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-900 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  }
+  
+  .input-field {
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-police-500 focus:ring-police-500 sm:text-sm;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200;
+  }
+  
+  .sidebar-item-active {
+    @apply bg-police-100 text-police-900 border-r-2 border-police-600;
+  }
+  
+  .sidebar-item-inactive {
+    @apply text-gray-600 hover:bg-gray-50 hover:text-gray-900;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Loading animation */
+.loading-spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #0ea5e9;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Thai text styling */
+.thai-text {
+  font-family: 'Sarabun', sans-serif;
+  line-height: 1.6;
+}
+
+/* Status indicators */
+.status-indicator {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.status-under-investigation {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-report-submitted {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-closed {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-archived {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.status-overdue {
+  @apply bg-red-100 text-red-800;
+}
+
+/* File upload area */
+.file-upload-area {
+  @apply border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-police-400 transition-colors duration-200;
+}
+
+.file-upload-area.dragover {
+  @apply border-police-500 bg-police-50;
+}
+
+/* Knowledge graph styles */
+.knowledge-graph {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+/* Audio controls */
+.audio-controls {
+  @apply flex items-center space-x-4 p-4 bg-gray-50 rounded-lg;
+}
+
+/* Timeline styles */
+.timeline-item {
+  @apply relative pl-8 pb-8;
+}
+
+.timeline-item::before {
+  content: '';
+  @apply absolute left-0 top-2 w-2 h-2 bg-police-600 rounded-full;
+}
+
+.timeline-item::after {
+  content: '';
+  @apply absolute left-1 top-4 w-0.5 h-full bg-gray-300;
+}
+
+.timeline-item:last-child::after {
+  display: none;
+}
+
+/* Map container */
+.map-container {
+  height: 400px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Evidence grid */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
