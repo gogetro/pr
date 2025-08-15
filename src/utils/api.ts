@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { ApiResponse, PaginatedResponse } from '../types';
+import { ApiResponse, PaginatedResponse, LoginResponse, User } from '../types';
 
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 class ApiClient {
   private client: AxiosInstance;
@@ -82,10 +82,13 @@ class ApiClient {
     }
   }
 
-  async uploadFile<T>(url: string, file: File, onProgress?: (progress: number) => void): Promise<ApiResponse<T>> {
+  async uploadFile<T>(url: string, file: File, metadata?: any, onProgress?: (progress: number) => void): Promise<ApiResponse<T>> {
     try {
       const formData = new FormData();
       formData.append('file', file);
+      if (metadata) {
+        formData.append('metadata', JSON.stringify(metadata));
+      }
 
       const response = await this.client.post(url, formData, {
         headers: {
@@ -136,19 +139,19 @@ const apiClient = new ApiClient();
 // Authentication API
 export const authApi = {
   login: (credentials: { username: string; password: string }) =>
-    apiClient.post('/auth/login', credentials),
+    apiClient.post<LoginResponse>('/auth/login', credentials),
   
   logout: () =>
     apiClient.post('/auth/logout'),
   
   refreshToken: () =>
-    apiClient.post('/auth/refresh'),
+    apiClient.post<LoginResponse>('/auth/refresh'),
   
   getProfile: () =>
     apiClient.get('/auth/profile'),
   
-  updateProfile: (data: any) =>
-    apiClient.put('/auth/profile', data),
+  updateProfile: (data: Partial<User>) =>
+    apiClient.put<User>('/auth/profile', data),
 };
 
 // Cases API
@@ -177,21 +180,8 @@ export const evidenceApi = {
   getEvidence: (caseId: string) =>
     apiClient.get(`/cases/${caseId}/evidence`),
   
-  uploadEvidence: (caseId: string, file: File, metadata: any, onProgress?: (progress: number) => void) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('metadata', JSON.stringify(metadata));
-    
-    return apiClient.client.post(`/cases/${caseId}/evidence`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      onUploadProgress: (progressEvent) => {
-        if (onProgress && progressEvent.total) {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          onProgress(progress);
-        }
-      },
-    });
-  },
+  uploadEvidence: (caseId: string, file: File, metadata: any, onProgress?: (progress: number) => void) =>
+    apiClient.uploadFile(`/cases/${caseId}/evidence`, file, metadata, onProgress),
   
   deleteEvidence: (evidenceId: string) =>
     apiClient.delete(`/evidence/${evidenceId}`),
