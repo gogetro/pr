@@ -133,7 +133,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!state.isAuthenticated || !state.token) return;
 
     const checkTokenExpiry = () => {
-      if (AuthUtils.isSessionExpiringSoon(state.token)) {
+      if (state.token && AuthUtils.isSessionExpiringSoon(state.token)) {
         refreshToken();
       }
     };
@@ -180,6 +180,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const updateProfile = async (data: Partial<User>): Promise<{ success: boolean; error?: string }> => {
+    if (!state.user) {
+      return { success: false, error: 'Not authenticated' };
+    }
     try {
       const response = await authApi.updateProfile(data);
       
